@@ -418,7 +418,7 @@ em{font-style:italic;color:var(--wine)}
 .modal__recap dt,.modal__recap .k{color:var(--ink-soft)}
 .modal__recap .v{font-weight:600}
 .modal__hint{font-size:.86rem;color:var(--ink-soft);margin-bottom:14px}
-.modal__copied{background:#e8f7ee;color:#256b46;font-size:.84rem;font-weight:500;border-radius:var(--r-sm);padding:9px 12px;margin:2px 0 10px}
+.modal__copied{background:#e8f7ee;color:#256b46;font-size:.95rem;font-weight:600;line-height:1.45;border:1px solid #8fd0aa;border-radius:var(--r-sm);padding:12px 14px;margin:4px 0 12px}
 .modal .btn{margin-bottom:10px}
 
 /* =========================================================
