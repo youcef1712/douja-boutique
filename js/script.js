@@ -625,18 +625,34 @@
     openModal();
   }
 
+  let lastFocused = null;
   function openModal() {
+    lastFocused = document.activeElement;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    // focus sur le 1er bouton d'action de la modale
+    const first = modal.querySelector("#waConfirm");
+    if (first) setTimeout(() => first.focus(), 30);
   }
   function closeModal() {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
   }
   $$("[data-close]", modal).forEach((el) => el.addEventListener("click", closeModal));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) { closeModal(); return; }
+    // piège de focus : Tab reste dans la modale
+    if (e.key === "Tab" && modal.classList.contains("is-open")) {
+      const f = $$('a[href], button:not([disabled])', modal).filter((el) => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
 
   // =========================================================
   // « Commander cette jupe » -> recopie couleur/taille puis scroll

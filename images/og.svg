@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf7f2"/>
+      <stop offset="1" stop-color="#f1e6da"/>
+    </linearGradient>
+    <linearGradient id="skirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a3854"/>
+      <stop offset="0.55" stop-color="#6e2a40"/>
+      <stop offset="1" stop-color="#561f31"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#e8d5d0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#e8d5d0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="582" rx="26" fill="none" stroke="#c8a86b" stroke-width="2"/>
+
+  <!-- visuel jupe à droite -->
+  <g transform="translate(780,150)">
+    <circle cx="150" cy="170" r="190" fill="url(#glow)"/>
+    <ellipse cx="150" cy="350" rx="120" ry="18" fill="#000" opacity="0.08"/>
+    <path d="M118 70 C100 150 78 240 64 326 C61 344 67 364 80 366 Q100 372 120 360 Q138 350 152 362 Q166 374 182 360 Q200 372 220 366 C232 364 237 344 234 326 C220 240 198 150 180 70 Z" fill="url(#skirt)"/>
+    <path d="M118 70 C100 150 78 240 64 326 C61 344 67 364 80 366 Q100 372 120 360 Q138 350 152 362 Q166 374 182 360 Q200 372 220 366 C232 364 237 344 234 326 C220 240 198 150 180 70 Z" fill="#ffffff" opacity="0.12"/>
+    <path d="M111 52 Q150 42 189 52 L184 78 Q150 88 116 78 Z" fill="#6e2a40"/>
+    <path d="M111 52 Q150 46 189 52 L188 57 Q150 51 112 57 Z" fill="#fff" opacity="0.3"/>
+  </g>
+
+  <!-- texte à gauche -->
+  <g transform="translate(90,150)">
+    <circle cx="34" cy="30" r="34" fill="#6e2a40"/>
+    <text x="34" y="44" font-family="Georgia, serif" font-size="40" font-weight="700" fill="#e7d6b6" text-anchor="middle">D</text>
+    <text x="90" y="48" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#2a2024">Douja</text>
+
+    <text x="0" y="150" font-family="Georgia, serif" font-size="74" font-weight="700" fill="#2a2024">Jupe Satin</text>
+    <text x="0" y="228" font-family="Georgia, serif" font-size="74" font-weight="700" font-style="italic" fill="#6e2a40">Premium</text>
+
+    <text x="0" y="300" font-family="Georgia, serif" font-size="56" font-weight="700" fill="#6e2a40">3 500 DA</text>
+
+    <g transform="translate(0,345)">
+      <rect x="0" y="0" width="560" height="48" rx="24" fill="#fff" stroke="#e9ded3"/>
+      <text x="28" y="31" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#2a2024">Paiement à la livraison · 58 wilayas · 6 couleurs</text>
+    </g>
+  </g>
+</svg>
