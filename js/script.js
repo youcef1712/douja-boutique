@@ -9,6 +9,12 @@
   const WHATSAPP = "213665319169";    // Numéro WhatsApp (format international sans +)
   const IG = "douja.19";              // Compte Instagram (pour les DM)
 
+  // ⚙️ CAPTURE AUTOMATIQUE DES COMMANDES (email instantané, gratuit)
+  // 1) Va sur https://web3forms.com → entre ton email → copie ta "Access Key"
+  // 2) Colle-la ci-dessous entre les guillemets.
+  // Tant que c'est vide, le site garde le mode WhatsApp/Instagram classique.
+  const WEB3FORMS_KEY = "";
+
   // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
   // Ajustez librement ces tarifs selon votre transporteur.
   const WILAYAS = [
@@ -163,7 +169,12 @@
     mItemName: { fr: "Jupe Satin", ar: "تنورة ساتان" },
     mQty: { fr: "Quantité", ar: "الكمية" },
     mShip: { fr: "Livraison", ar: "التوصيل" },
-    mTotal: { fr: "Total", ar: "الإجمالي" }
+    mTotal: { fr: "Total", ar: "الإجمالي" },
+    sending: { fr: "Envoi…", ar: "جارٍ الإرسال…" },
+    titleAuto: { fr: "Commande envoyée ! ✅", ar: "تم إرسال الطلب! ✅" },
+    titleManual: { fr: "Commande reçue ! 🎉", ar: "تم استلام الطلب! 🎉" },
+    hintAuto: { fr: "✅ Nous avons bien reçu votre commande, on vous appelle très vite pour confirmer. Vous pouvez aussi nous écrire directement :", ar: "✅ لقد استلمنا طلبكِ، سنتصل بكِ قريباً للتأكيد. يمكنكِ أيضاً مراسلتنا مباشرة:" },
+    hintManual: { fr: "Envoyez votre commande pour la valider — choisissez WhatsApp ou Instagram :", ar: "أرسلي طلبكِ للتأكيد — اختاري واتساب أو إنستغرام:" }
   };
   const L = (o) => (o[lang] != null ? o[lang] : o.fr);
 
@@ -507,6 +518,34 @@
     form.querySelector(`[name="${n}"]`).addEventListener("input", () => clearError(n));
   });
 
+  // Envoi automatique de la commande par email (Web3Forms)
+  function sendOrderAuto(order) {
+    if (!WEB3FORMS_KEY) return Promise.resolve(false); // non configuré
+    const payload = {
+      access_key: WEB3FORMS_KEY,
+      subject: `🌸 Nouvelle commande Douja — ${order.name} (${order.total} DA)`,
+      from_name: "Boutique Douja",
+      "Nom": order.name,
+      "Téléphone": order.phone,
+      "Wilaya": order.wilaya,
+      "Commune": order.commune,
+      "Livraison": order.delivery,
+      "Produit": "Jupe Satin Premium",
+      "Couleur": order.color,
+      "Taille": order.size,
+      "Quantité": order.qty,
+      "Sous-total": fmt(order.sub),
+      "Frais livraison": order.ship === 0 ? "OFFERTE" : fmt(order.ship),
+      "TOTAL": fmt(order.total),
+      "Note": order.note || "—"
+    };
+    return fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    }).then((r) => r.json()).then((d) => !!d.success).catch(() => false);
+  }
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     let ok = true;
@@ -539,13 +578,23 @@
       sub, ship, total
     };
 
-    showConfirmation(order);
-    // Sauvegarde locale (utile en l'absence de backend)
+    // Sauvegarde locale (toujours)
     try {
       const all = JSON.parse(localStorage.getItem("douja_orders") || "[]");
       all.push({ ...order, date: new Date().toISOString() });
       localStorage.setItem("douja_orders", JSON.stringify(all));
     } catch (_) {}
+
+    // Envoi auto puis confirmation
+    const btn = $("#submitBtn");
+    const btnTxt = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = L(STR.sending);
+    sendOrderAuto(order).then((captured) => {
+      btn.disabled = false;
+      btn.textContent = btnTxt;
+      showConfirmation(order, captured);
+    });
   });
 
   // =========================================================
@@ -594,13 +643,20 @@
     document.body.removeChild(ta);
   }
 
-  function showConfirmation(o) {
+  function showConfirmation(o, captured) {
     const first = o.name.split(" ")[0];
     const delLabel = lang === "ar"
       ? (state.delivery === "domicile" ? "إلى المنزل" : "إلى المكتب")
       : o.delivery;
     $("#modalBody").innerHTML =
       `${L(STR.mThanks)} <strong>${first}</strong>${L(STR.mBody)} <strong>${o.phone}</strong> ${L(STR.mBodyEnd)}`;
+
+    // Le sous-titre s'adapte : commande déjà reçue (auto) ou à envoyer (manuel)
+    const hintEl = $(".modal__hint");
+    if (hintEl) hintEl.innerHTML = captured ? L(STR.hintAuto) : L(STR.hintManual);
+    const modalTitle = $("#modalTitle");
+    if (modalTitle) modalTitle.innerHTML = captured ? L(STR.titleAuto) : L(STR.titleManual);
+
     $("#modalRecap").innerHTML = `
       <div><span class="k">${L(STR.mProduct)}</span><span class="v">${L(STR.mItemName)} · ${colorLabel(o.color)} · ${o.size}</span></div>
       <div><span class="k">${L(STR.mQty)}</span><span class="v">${o.qty}</span></div>
