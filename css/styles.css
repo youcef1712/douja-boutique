@@ -80,6 +80,8 @@ em{font-style:italic;color:var(--wine)}
 .btn--gold{--btn-bg:linear-gradient(135deg,#d4b878,#c8a86b);--btn-fg:#3a2a16}
 .btn--ghost{--btn-bg:transparent;--btn-fg:var(--wine);border-color:var(--wine)}
 .btn--ghost:hover{background:var(--wine);color:#fff}
+.btn--wa{--btn-bg:#25d366;--btn-fg:#fff}
+.btn--ig{--btn-bg:linear-gradient(135deg,#f09433,#e6683c 35%,#dc2743 60%,#cc2366 80%,#bc1888);--btn-fg:#fff}
 .btn--sm{padding:.6em 1.1em;font-size:.9rem}
 .btn--lg{padding:1.02em 1.9em;font-size:1.05rem}
 .btn--block{display:flex;width:100%}
@@ -416,6 +418,7 @@ em{font-style:italic;color:var(--wine)}
 .modal__recap dt,.modal__recap .k{color:var(--ink-soft)}
 .modal__recap .v{font-weight:600}
 .modal__hint{font-size:.86rem;color:var(--ink-soft);margin-bottom:14px}
+.modal__copied{background:#e8f7ee;color:#256b46;font-size:.84rem;font-weight:500;border-radius:var(--r-sm);padding:9px 12px;margin:2px 0 10px}
 .modal .btn{margin-bottom:10px}
 
 /* =========================================================

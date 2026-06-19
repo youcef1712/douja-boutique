@@ -7,6 +7,7 @@
   // ---- Configuration ----
   const PRICE = 3500;                 // Prix de la jupe (DA)
   const WHATSAPP = "213665319169";    // Numéro WhatsApp (format international sans +)
+  const IG = "douja.19";              // Compte Instagram (pour les DM)
 
   // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
   // Ajustez librement ces tarifs selon votre transporteur.
@@ -132,8 +133,10 @@
     "foot.rights": "كل الحقوق محفوظة.", "foot.cod": "الدفع عند الاستلام · 58 ولاية",
     "mb.name": "تنورة ساتان", "mb.order": "اطلبي",
     "modal.title": "تم استلام الطلب! 🎉",
-    "modal.hint": "يمكنكِ أيضاً إرسال طلبكِ مباشرة عبر واتساب لتسريع العملية:",
-    "modal.wa": "إرسال عبر واتساب", "modal.close": "إغلاق"
+    "modal.hint": "أرسلي طلبكِ للتأكيد — اختاري واتساب أو إنستغرام:",
+    "modal.wa": "إرسال عبر واتساب", "modal.ig": "اطلبي عبر إنستغرام",
+    "modal.copied": "✓ تم نسخ الطلب! الصقيه (ضغط مطوّل) في رسالة إنستغرام ثم أرسليه.",
+    "modal.close": "إغلاق"
   };
 
   // Textes dynamiques (générés par JS) — fr/ar
@@ -550,9 +553,9 @@
   // =========================================================
   const modal = $("#confirmModal");
 
-  function buildWhatsAppText(o) {
-    const lines = [
-      "*Nouvelle commande — Douja*",
+  function buildOrderLines(o) {
+    return [
+      "🌸 Nouvelle commande — Douja",
       "",
       "👗 Jupe Satin Premium",
       `• Couleur : ${o.color}`,
@@ -568,10 +571,27 @@
       "",
       `Sous-total : ${fmt(o.sub)}`,
       `Livraison : ${o.ship === 0 ? "OFFERTE ✅" : fmt(o.ship)}`,
-      `*Total : ${fmt(o.total)}*`,
+      `Total : ${fmt(o.total)}`,
       "💵 Paiement à la livraison"
-    ].filter(Boolean);
-    return encodeURIComponent(lines.join("\n"));
+    ].filter(Boolean).join("\n");
+  }
+
+  // Copie de texte (avec repli si le presse-papiers est bloqué, ex. fichier local)
+  function copyText(t) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).catch(() => fallbackCopy(t));
+        return;
+      }
+    } catch (e) {}
+    fallbackCopy(t);
+  }
+  function fallbackCopy(t) {
+    const ta = document.createElement("textarea");
+    ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
   }
 
   function showConfirmation(o) {
@@ -587,7 +607,21 @@
       <div><span class="k">${L(STR.mShip)}</span><span class="v">${delLabel}</span></div>
       <div><span class="k">${L(STR.mTotal)}</span><span class="v">${fmt(o.total)}</span></div>
     `;
-    $("#waConfirm").href = `https://wa.me/${WHATSAPP}?text=${buildWhatsAppText(o)}`;
+    const plain = buildOrderLines(o);
+    $("#waConfirm").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(plain)}`;
+
+    // Instagram : copie la commande puis ouvre les DM @douja.19
+    const fb = $("#copyFeedback");
+    if (fb) fb.hidden = true;
+    const ig = $("#igConfirm");
+    if (ig) {
+      ig.href = "https://ig.me/m/" + IG;
+      ig.onclick = function () {
+        copyText(plain);
+        if (fb) fb.hidden = false;
+        // on laisse le lien s'ouvrir normalement (target=_blank)
+      };
+    }
     openModal();
   }
 
