@@ -6,7 +6,7 @@
 
   // ---- Configuration ----
   const PRICE = 3500;                 // Prix de la jupe (DA)
-  const WHATSAPP = "213665319169";    // Numéro WhatsApp (format international sans +)
+  const WHATSAPP = "213664319169";    // Numéro WhatsApp (format international sans +)
   const IG = "douja.19";              // Compte Instagram (pour les DM)
 
   // ⚙️ CAPTURE AUTOMATIQUE DES COMMANDES (email instantané, gratuit)
@@ -14,6 +14,10 @@
   // 2) Colle-la ci-dessous entre les guillemets.
   // Tant que c'est vide, le site garde le mode WhatsApp/Instagram classique.
   const WEB3FORMS_KEY = "fa421a8a-3d5d-4038-bc05-737d66b4150d";
+
+  // 📊 GOOGLE SHEETS (tableau de toutes les commandes) — optionnel
+  // Colle ici l'URL de ton script Google Apps (voir LISEZ-MOI). Vide = désactivé.
+  const GSHEET_URL = "";
 
   // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
   // Ajustez librement ces tarifs selon votre transporteur.
@@ -546,6 +550,23 @@
     }).then((r) => r.json()).then((d) => !!d.success).catch(() => false);
   }
 
+  // Envoi parallèle vers Google Sheets (tableau de suivi)
+  function sendToSheet(order) {
+    if (!GSHEET_URL) return Promise.resolve(false);
+    const body = JSON.stringify({
+      date: new Date().toLocaleString("fr-FR"),
+      name: order.name, phone: order.phone, wilaya: order.wilaya, commune: order.commune,
+      delivery: order.delivery, product: "Jupe Satin Premium",
+      color: order.color, size: order.size, qty: order.qty,
+      ship: order.ship === 0 ? "OFFERTE" : order.ship, total: order.total, note: order.note || ""
+    });
+    return fetch(GSHEET_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: body
+    }).then(() => true).catch(() => false);
+  }
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     let ok = true;
@@ -590,9 +611,10 @@
     const btnTxt = btn.textContent;
     btn.disabled = true;
     btn.textContent = L(STR.sending);
-    sendOrderAuto(order).then((captured) => {
+    Promise.all([sendOrderAuto(order), sendToSheet(order)]).then((res) => {
       btn.disabled = false;
       btn.textContent = btnTxt;
+      const captured = res[0] || res[1]; // email OU sheet réussi
       showConfirmation(order, captured);
     });
   });

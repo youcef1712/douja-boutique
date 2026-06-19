@@ -56,6 +56,31 @@ automatiquement (selon la couleur choisie).
 
 ---
 
+## 📊 Activer Google Sheets (tableau des commandes)
+1. Crée un Google Sheet vide sur https://sheets.new
+2. Menu **Extensions → Apps Script**.
+3. Efface tout et colle ce code :
+```js
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Date','Nom','Téléphone','Wilaya','Commune','Livraison','Produit','Couleur','Taille','Quantité','Livraison(DA)','Total(DA)','Note']);
+    }
+    sheet.appendRow([data.date, data.name, data.phone, data.wilaya, data.commune,
+      data.delivery, data.product, data.color, data.size, data.qty, data.ship, data.total, data.note]);
+    return ContentService.createTextOutput(JSON.stringify({success:true}));
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({success:false}));
+  }
+}
+```
+4. **Déployer → Nouveau déploiement → Type : Application Web**.
+5. « Qui peut accéder » → **Tout le monde** → **Déployer** (autorise l'accès).
+6. Copie l'**URL de l'application Web** (se termine par `/exec`).
+7. Colle-la dans `js/script.js` → `const GSHEET_URL = "...";`
+
 ## ⚙️ Réglages avancés (dans `js/script.js`)
 - **Livraison offerte** dès X jupes : `const FREE_SHIP_QTY = 2;`
 - **Stock affiché** par couleur : objet `STOCK = { "Bordeaux": 7, ... }`
