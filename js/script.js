@@ -17,7 +17,7 @@
 
   // 📊 GOOGLE SHEETS (tableau de toutes les commandes) — optionnel
   // Colle ici l'URL de ton script Google Apps (voir LISEZ-MOI). Vide = désactivé.
-  const GSHEET_URL = "";
+  const GSHEET_URL = "https://script.google.com/macros/s/AKfycbx26FQOAP5SM_08JNALEnA11zrJ6waEuMKhxvJuqqKktuvvx-_2NExMlms7_4mEc5ctBQ/exec";
 
   // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
   // Ajustez librement ces tarifs selon votre transporteur.
