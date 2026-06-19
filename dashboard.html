@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Douja · Tableau de bord</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%236e2a40'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23e7d6b6' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#fbf7f2;--cream2:#f4ece3;--ink:#2a2024;--soft:#6b5d63;--wine:#6e2a40;
+    --wine2:#561f31;--gold:#c8a86b;--line:#e9ded3;--ok:#2f7d5b;--white:#fff;
+    --sans:"Jost",system-ui,sans-serif;--serif:"Playfair Display",Georgia,serif;
+    --sh:0 8px 26px rgba(86,31,49,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:var(--cream);color:var(--ink)}
+  h1,h2,h3{font-family:var(--serif);margin:0}
+  .wrap{max-width:1200px;margin:0 auto;padding:22px}
+
+  /* Login */
+  .login{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--wine),var(--wine2));z-index:50;padding:20px}
+  .login__box{background:#fff;border-radius:22px;padding:36px 30px;max-width:380px;width:100%;text-align:center;box-shadow:var(--sh)}
+  .login__mark{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--wine),var(--wine2));color:#e7d6b6;font-family:var(--serif);font-weight:700;font-size:1.7rem;display:grid;place-items:center;margin:0 auto 16px}
+  .login h1{font-size:1.5rem;margin-bottom:6px}
+  .login p{color:var(--soft);font-size:.9rem;margin:0 0 20px}
+  .login input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;font-family:var(--sans);margin-bottom:12px}
+  .login input:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(110,42,64,.15)}
+  .login__err{color:#c0392b;font-size:.85rem;min-height:1.1em;margin-bottom:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+    background:var(--wine);color:#fff;font-family:var(--sans);font-weight:500;font-size:1rem;
+    padding:.85em 1.4em;border-radius:999px;transition:.2s;width:100%}
+  .btn:hover{background:var(--wine2)}
+  .btn--ghost{background:transparent;color:var(--wine);border:1.5px solid var(--wine);width:auto;padding:.5em 1.1em;font-size:.9rem}
+  .btn--ghost:hover{background:var(--wine);color:#fff}
+
+  /* App */
+  .app{display:none}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+  .topbar__in{max-width:1200px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand__mark{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--wine),var(--wine2));color:#e7d6b6;font-family:var(--serif);font-weight:700;display:grid;place-items:center}
+  .brand h1{font-size:1.3rem}
+  .brand small{color:var(--soft);font-size:.8rem;display:block;font-family:var(--sans)}
+  .topbar__actions{display:flex;gap:10px;align-items:center}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--sh)}
+  .kpi__label{font-size:.82rem;color:var(--soft);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .kpi__value{font-family:var(--serif);font-size:1.9rem;font-weight:700;color:var(--wine);line-height:1;font-variant-numeric:tabular-nums}
+  .kpi__sub{font-size:.78rem;color:var(--soft);margin-top:5px}
+  .kpi .dot{width:9px;height:9px;border-radius:50%;background:var(--gold)}
+
+  .grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--sh)}
+  .card h3{font-size:1.1rem;margin-bottom:14px}
+  .card canvas{max-height:260px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+
+  .tablecard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--sh)}
+  .tablehead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .search{padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:var(--sans);font-size:.92rem;min-width:200px}
+  .search:focus{outline:none;border-color:var(--wine)}
+  .tablewrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:11px 12px;text-align:left;white-space:nowrap}
+  thead th{background:var(--cream2);color:var(--ink);font-weight:600;position:sticky;top:0}
+  tbody tr{border-top:1px solid var(--line)}
+  tbody tr:hover{background:var(--cream)}
+  td .tot{font-weight:600;color:var(--wine)}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;background:var(--cream2);font-size:.78rem}
+  .empty{text-align:center;color:var(--soft);padding:30px}
+  .loading{text-align:center;color:var(--soft);padding:40px}
+
+  @media (max-width:900px){
+    .kpis{grid-template-columns:1fr 1fr}
+    .grid,.grid3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- Écran de connexion -->
+<div class="login" id="login">
+  <div class="login__box">
+    <div class="login__mark">D</div>
+    <h1>Tableau de bord</h1>
+    <p>Espace privé — Boutique Douja</p>
+    <form id="loginForm">
+      <input type="password" id="pwd" placeholder="Mot de passe" autocomplete="current-password" />
+      <div class="login__err" id="loginErr"></div>
+      <button class="btn" type="submit" id="loginBtn">Voir mes commandes</button>
+    </form>
+  </div>
+</div>
+
+<!-- Application -->
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="topbar__in">
+      <div class="brand">
+        <div class="brand__mark">D</div>
+        <div><h1>Douja</h1><small>Tableau de bord des commandes</small></div>
+      </div>
+      <div class="topbar__actions">
+        <button class="btn btn--ghost" id="refreshBtn">↻ Actualiser</button>
+        <button class="btn btn--ghost" id="logoutBtn">Déconnexion</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div id="content"><div class="loading">Chargement des données…</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// URL de ton script Google (même que dans le site)
+var GSHEET_URL = "https://script.google.com/macros/s/AKfycbx26FQOAP5SM_08JNALEnA11zrJ6waEuMKhxvJuqqKktuvvx-_2NExMlms7_4mEc5ctBQ/exec";
+
+var $ = function(s){ return document.querySelector(s); };
+var charts = [];
+var currentToken = "";
+
+// ---- JSONP : lire les données du Google Sheet sans blocage CORS ----
+function loadData(token){
+  return new Promise(function(resolve, reject){
+    var cb = "doujaCB_" + Date.now();
+    var s = document.createElement("script");
+    var timer = setTimeout(function(){ cleanup(); reject(new Error("timeout")); }, 15000);
+    function cleanup(){ clearTimeout(timer); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(data){ cleanup(); resolve(data); };
+    s.onerror = function(){ cleanup(); reject(new Error("network")); };
+    s.src = GSHEET_URL + "?token=" + encodeURIComponent(token) + "&callback=" + cb + "&t=" + Date.now();
+    document.body.appendChild(s);
+  });
+}
+
+// ---- Utilitaires ----
+function num(v){ if(typeof v==="number") return v; return parseInt(String(v||"").replace(/[^\d]/g,""),10)||0; }
+function parseDate(v){
+  if(v instanceof Date) return v;
+  var m = String(v||"").match(/(\d{1,2})[\/](\d{1,2})[\/](\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/);
+  if(m) return new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0));
+  var d = new Date(v); return isNaN(d) ? null : d;
+}
+function fmtDA(n){ return n.toLocaleString("fr-FR") + " DA"; }
+function sameDay(a,b){ return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function get(o, keys){ for(var i=0;i<keys.length;i++){ if(o[keys[i]]!=null && o[keys[i]]!=="") return o[keys[i]]; } return ""; }
+
+// ---- Connexion ----
+$("#loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var pwd = $("#pwd").value.trim();
+  if(!pwd){ $("#loginErr").textContent = "Entrez le mot de passe."; return; }
+  $("#loginBtn").disabled = true; $("#loginBtn").textContent = "Connexion…";
+  $("#loginErr").textContent = "";
+  loadData(pwd).then(function(data){
+    $("#loginBtn").disabled = false; $("#loginBtn").textContent = "Voir mes commandes";
+    if(data && data.error){ $("#loginErr").textContent = "Mot de passe incorrect."; return; }
+    currentToken = pwd;
+    try{ sessionStorage.setItem("douja_dash_pwd", pwd); }catch(e){}
+    $("#login").style.display = "none";
+    $("#app").style.display = "block";
+    render(data || []);
+  }).catch(function(){
+    $("#loginBtn").disabled = false; $("#loginBtn").textContent = "Voir mes commandes";
+    $("#loginErr").textContent = "Connexion impossible. Vérifiez le déploiement du script.";
+  });
+});
+
+$("#refreshBtn").addEventListener("click", function(){
+  $("#content").innerHTML = '<div class="loading">Actualisation…</div>';
+  loadData(currentToken).then(function(d){ render(d||[]); }).catch(function(){ $("#content").innerHTML='<div class="empty">Erreur de chargement.</div>'; });
+});
+$("#logoutBtn").addEventListener("click", function(){
+  try{ sessionStorage.removeItem("douja_dash_pwd"); }catch(e){}
+  location.reload();
+});
+
+// Session mémorisée
+(function(){
+  var saved=""; try{ saved=sessionStorage.getItem("douja_dash_pwd")||""; }catch(e){}
+  if(saved){ $("#pwd").value=saved; loadData(saved).then(function(data){
+    if(data && !data.error){ currentToken=saved; $("#login").style.display="none"; $("#app").style.display="block"; render(data); }
+  }).catch(function(){}); }
+})();
+
+// ---- Rendu du tableau de bord ----
+function render(rows){
+  charts.forEach(function(c){ try{c.destroy();}catch(e){} }); charts=[];
+  if(!rows || !rows.length){
+    $("#content").innerHTML = '<div class="empty">Aucune commande pour l’instant. Dès qu’une cliente commande, elle apparaîtra ici. 🌸</div>';
+    return;
+  }
+
+  // Normaliser
+  var data = rows.map(function(r){
+    return {
+      date: parseDate(get(r,["Date","date"])),
+      name: get(r,["Nom","name"]),
+      phone: get(r,["Téléphone","Telephone","phone"]),
+      wilaya: get(r,["Wilaya","wilaya"]),
+      commune: get(r,["Commune","commune"]),
+      delivery: get(r,["Livraison","delivery"]),
+      color: get(r,["Couleur","color"]),
+      size: get(r,["Taille","size"]),
+      qty: num(get(r,["Quantité","Quantite","qty"]))||1,
+      total: num(get(r,["Total(DA)","Total","total"]))
+    };
+  });
+
+  var now = new Date();
+  var totalOrders = data.length;
+  var revenue = data.reduce(function(s,o){ return s+o.total; },0);
+  var todayCount = data.filter(function(o){ return sameDay(o.date, now); }).length;
+  var avg = totalOrders ? Math.round(revenue/totalOrders) : 0;
+
+  // KPIs
+  var html = '<div class="kpis">'
+    + kpi("Commandes", totalOrders, "au total")
+    + kpi("Chiffre d’affaires", fmtDA(revenue), "ventes cumulées")
+    + kpi("Aujourd’hui", todayCount, "nouvelles commandes")
+    + kpi("Panier moyen", fmtDA(avg), "par commande")
+    + '</div>';
+
+  // Graphiques
+  html += '<div class="grid">'
+    + '<div class="card"><h3>Commandes par jour (14 derniers jours)</h3><canvas id="chDays"></canvas></div>'
+    + '<div class="card"><h3>Par couleur</h3><canvas id="chColor"></canvas></div>'
+    + '</div>';
+  html += '<div class="grid3">'
+    + '<div class="card"><h3>Top wilayas</h3><canvas id="chWilaya"></canvas></div>'
+    + '<div class="card"><h3>Par taille</h3><canvas id="chSize"></canvas></div>'
+    + '</div>';
+
+  // Tableau
+  html += '<div class="tablecard"><div class="tablehead"><h3>Toutes les commandes ('+totalOrders+')</h3>'
+    + '<input class="search" id="search" placeholder="Rechercher (nom, tél, wilaya…)" /></div>'
+    + '<div class="tablewrap"><table><thead><tr>'
+    + '<th>Date</th><th>Nom</th><th>Téléphone</th><th>Wilaya</th><th>Couleur</th><th>Taille</th><th>Qté</th><th>Livraison</th><th>Total</th>'
+    + '</tr></thead><tbody id="tbody"></tbody></table></div></div>';
+
+  $("#content").innerHTML = html;
+
+  // KPI cards need closing — fix: build properly
+  buildCharts(data, now);
+  buildTable(data);
+  $("#search").addEventListener("input", function(){ buildTable(data, this.value.toLowerCase()); });
+}
+
+function kpi(label, value, sub){
+  return '<div class="kpi"><div class="kpi__label"><span class="dot"></span>'+label+'</div>'
+    + '<div class="kpi__value">'+value+'</div><div class="kpi__sub">'+sub+'</div></div>';
+}
+
+function countBy(data, key){
+  var m={}; data.forEach(function(o){ var k=o[key]||"—"; m[k]=(m[k]||0)+1; }); return m;
+}
+
+var PALETTE = ["#6e2a40","#c8a86b","#2f4858","#1f5c4a","#d9a7b0","#8a3854","#a98b53","#3d5d70"];
+
+function buildCharts(data, now){
+  if(typeof Chart==="undefined") return;
+  Chart.defaults.font.family = "Jost, sans-serif";
+  Chart.defaults.color = "#6b5d63";
+
+  // Par jour (14 jours)
+  var days=[], labels=[], counts=[];
+  for(var i=13;i>=0;i--){ var d=new Date(now); d.setDate(now.getDate()-i); days.push(d);
+    labels.push(d.getDate()+"/"+(d.getMonth()+1));
+    counts.push(data.filter(function(o){ return sameDay(o.date,d); }).length); }
+  charts.push(new Chart($("#chDays"),{type:"bar",data:{labels:labels,datasets:[{data:counts,backgroundColor:"#6e2a40",borderRadius:6}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}));
+
+  // Couleur (doughnut)
+  var col=countBy(data,"color");
+  charts.push(new Chart($("#chColor"),{type:"doughnut",data:{labels:Object.keys(col),datasets:[{data:Object.values(col),backgroundColor:PALETTE}]},
+    options:{plugins:{legend:{position:"bottom"}}}}));
+
+  // Wilayas (top 8)
+  var wil=countBy(data,"wilaya");
+  var wEntries=Object.keys(wil).map(function(k){return [k,wil[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
+  charts.push(new Chart($("#chWilaya"),{type:"bar",data:{labels:wEntries.map(function(e){return e[0];}),datasets:[{data:wEntries.map(function(e){return e[1];}),backgroundColor:"#c8a86b",borderRadius:6}]},
+    options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}}));
+
+  // Taille
+  var sz=countBy(data,"size");
+  var order=["S","M","L","XL"]; var szLabels=order.filter(function(s){return sz[s];}).concat(Object.keys(sz).filter(function(s){return order.indexOf(s)<0;}));
+  charts.push(new Chart($("#chSize"),{type:"bar",data:{labels:szLabels,datasets:[{data:szLabels.map(function(s){return sz[s];}),backgroundColor:"#2f4858",borderRadius:6}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}));
+}
+
+function buildTable(data, q){
+  var rows = data.slice().sort(function(a,b){ return (b.date||0)-(a.date||0); });
+  if(q){ rows = rows.filter(function(o){ return (o.name+" "+o.phone+" "+o.wilaya+" "+o.color+" "+o.commune).toLowerCase().indexOf(q)>=0; }); }
+  var tb=$("#tbody"); if(!tb) return;
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="9" class="empty">Aucun résultat.</td></tr>'; return; }
+  tb.innerHTML = rows.map(function(o){
+    var d=o.date?(("0"+o.date.getDate()).slice(-2)+"/"+("0"+(o.date.getMonth()+1)).slice(-2)+" "+("0"+o.date.getHours()).slice(-2)+":"+("0"+o.date.getMinutes()).slice(-2)):"—";
+    return "<tr><td>"+d+"</td><td>"+esc(o.name)+"</td><td>"+esc(o.phone)+"</td><td>"+esc(o.wilaya)
+      +"</td><td><span class='badge'>"+esc(o.color)+"</span></td><td>"+esc(o.size)+"</td><td>"+o.qty
+      +"</td><td>"+esc(o.delivery)+"</td><td class='tot'>"+fmtDA(o.total)+"</td></tr>";
+  }).join("");
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+</script>
+</body>
+</html>
