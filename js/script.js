@@ -13,7 +13,7 @@
   // 1) Va sur https://web3forms.com → entre ton email → copie ta "Access Key"
   // 2) Colle-la ci-dessous entre les guillemets.
   // Tant que c'est vide, le site garde le mode WhatsApp/Instagram classique.
-  const WEB3FORMS_KEY = "";
+  const WEB3FORMS_KEY = "fa421a8a-3d5d-4038-bc05-737d66b4150d";
 
   // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
   // Ajustez librement ces tarifs selon votre transporteur.
