@@ -191,10 +191,21 @@
   const phEls = $$("[data-i18n-ph]");
   phEls.forEach((el) => { el.__frph = el.getAttribute("placeholder") || ""; });
 
+  // Charge la police arabe (Cairo) uniquement quand on passe en arabe
+  function ensureArabicFont() {
+    if (document.getElementById("cairoFont")) return;
+    const link = document.createElement("link");
+    link.id = "cairoFont";
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap";
+    document.head.appendChild(link);
+  }
+
   function setLang(l) {
     lang = l;
     try { localStorage.setItem("douja_lang", l); } catch (e) {}
     const rtl = (l === "ar");
+    if (rtl) ensureArabicFont();
     document.documentElement.lang = rtl ? "ar" : "fr";
     document.documentElement.dir = rtl ? "rtl" : "ltr";
     i18nEls.forEach((el) => {
@@ -694,10 +705,21 @@
     const ig = $("#igConfirm");
     if (ig) {
       ig.href = "https://ig.me/m/" + IG;
-      ig.onclick = function () {
+      ig.onclick = function (e) {
+        e.preventDefault();
         copyText(plain);
         if (fb) fb.hidden = false;
-        // on laisse le lien s'ouvrir normalement (target=_blank)
+        // Tente d'ouvrir l'APPLI Instagram (où la cliente est connectée),
+        // sinon repli vers le web après un court délai.
+        var opened = false;
+        var onHide = function () { if (document.hidden) opened = true; };
+        document.addEventListener("visibilitychange", onHide);
+        setTimeout(function () {
+          document.removeEventListener("visibilitychange", onHide);
+          if (!opened) window.open("https://ig.me/m/" + IG, "_blank");
+        }, 1400);
+        // Schéma natif : ouvre le profil @douja.19 dans l'appli
+        window.location.href = "instagram://user?username=" + IG;
       };
     }
     openModal();
