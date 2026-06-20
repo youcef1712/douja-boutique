@@ -136,6 +136,9 @@
     "sum.unit": "سعر الوحدة", "sum.qty": "الكمية", "sum.sub": "المجموع الفرعي",
     "sum.ship": "التوصيل", "sum.total": "المبلغ الإجمالي", "sum.cod": "💵 الدفع عند الاستلام",
     "sum.a1": "✓ الطرد مفحوص قبل الإرسال", "sum.a2": "✓ تبديل عند مشكلة في المقاس", "sum.a3": "✓ خدمة زبائن سريعة",
+    "sum.discount": "تخفيض الباقة",
+    "rr.cod": "الدفع عند الاستلام", "rr.exch": "تبديل سهل", "rr.fast": "توصيل سريع",
+    "modal.share": "💛 شاركيها مع صديقة",
     "faq.eyebrow": "أسئلة شائعة", "faq.head": "نجيب عن كل شيء",
     "q1": "كيف تتم عملية الدفع؟", "a1": "تدفعين نقداً عند استلام الطرد. لا تسبيق ولا بطاقة بنكية.",
     "q2": "ما هي مدة التوصيل؟", "a2": "من 2 إلى 4 أيام عمل حسب ولايتكِ. نتصل بكِ للتأكيد قبل الإرسال.",
@@ -163,8 +166,13 @@
     home: { fr: "domicile", ar: "منزل" },
     desk: { fr: "bureau", ar: "مكتب" },
     taille: { fr: "Taille", ar: "مقاس" },
-    bundleDef: { fr: 'Ajoutez une 2<sup>e</sup> jupe et la <strong>livraison est offerte</strong> !', ar: 'أضيفي تنورة ثانية و<strong>التوصيل مجاني</strong>!' },
-    bundleHit: { fr: '🎉 <strong>Livraison offerte</strong> appliquée à votre commande !', ar: '🎉 تم تطبيق <strong>التوصيل المجاني</strong> على طلبكِ!' },
+    bundleDef: { fr: 'Ajoutez une 2<sup>e</sup> jupe : <strong>−5% + livraison offerte</strong> ! (−10% dès 3)', ar: 'أضيفي تنورة ثانية: <strong>−5٪ + توصيل مجاني</strong>! (−10٪ من 3)' },
+    bundleHit2: { fr: '🎉 <strong>−5% + livraison offerte</strong> appliqués ! Passez à 3 pour −10%', ar: '🎉 تم تطبيق <strong>−5٪ + توصيل مجاني</strong>! اطلبي 3 لـ −10٪' },
+    bundleHit3: { fr: '🎉 <strong>−10% + livraison offerte</strong> appliqués à votre commande !', ar: '🎉 تم تطبيق <strong>−10٪ + توصيل مجاني</strong> على طلبكِ!' },
+    eta48: { fr: "Livraison estimée : 24–48h", ar: "التوصيل المقدّر: 24–48 سا" },
+    eta24: { fr: "Livraison estimée : 2 à 4 jours", ar: "التوصيل المقدّر: من 2 إلى 4 أيام" },
+    etaSud: { fr: "Livraison estimée : 3 à 6 jours", ar: "التوصيل المقدّر: من 3 إلى 6 أيام" },
+    shareText: { fr: "Regarde cette jupe satin Douja 🌸", ar: "شوفي تنورة الساتان من دوجة 🌸" },
     errName: { fr: "Indiquez votre nom complet.", ar: "أدخلي اسمكِ الكامل." },
     errPhone: { fr: "Numéro invalide (ex. 0X XX XX XX XX).", ar: "رقم غير صحيح (مثال: 06 XX XX XX XX)." },
     errWilaya: { fr: "Choisissez votre wilaya.", ar: "اختاري ولايتكِ." },
@@ -456,6 +464,8 @@
       $('[data-fee="domicile"]').textContent = fmt(state.fees[0]);
       $('[data-fee="stopdesk"]').textContent = fmt(state.fees[1]);
       clearError("wilaya");
+      const eta = $("#shipEta");
+      if (eta) { eta.textContent = deliveryEta(opt.value); eta.hidden = false; }
     }
     updateSummary();
   });
@@ -465,6 +475,19 @@
   // =========================================================
   const FREE_SHIP_QTY = 2; // livraison offerte à partir de 2 jupes
 
+  // Réduction pack : −5% dès 2 jupes, −10% dès 3
+  function discountRate(q) { return q >= 3 ? 0.10 : q >= 2 ? 0.05 : 0; }
+
+  // Délai de livraison estimé par zone
+  const ZONE_CENTRE = [16, 9, 35, 42, 10, 26, 15, 44, 6, 5, 25];
+  const ZONE_SUD = [8, 11, 30, 32, 33, 37, 39, 45, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58];
+  function deliveryEta(wilayaValue) {
+    const n = parseInt(wilayaValue, 10);
+    if (ZONE_CENTRE.indexOf(n) >= 0) return L(STR.eta48);
+    if (ZONE_SUD.indexOf(n) >= 0) return L(STR.etaSud);
+    return L(STR.eta24);
+  }
+
   function shippingFee() {
     if (state.qty >= FREE_SHIP_QTY) return 0;     // offerte
     if (!state.fees) return null;                  // wilaya pas encore choisie
@@ -473,6 +496,8 @@
 
   function updateSummary() {
     const sub = PRICE * state.qty;
+    const disc = Math.round(sub * discountRate(state.qty));
+    const base = sub - disc;
     const ship = shippingFee();
     const shipEl = $("#sumShip");
 
@@ -480,33 +505,35 @@
     $("#sumQty").textContent = state.qty;
     $("#sumSub").textContent = fmt(sub);
 
+    // Ligne réduction pack
+    const dRow = $("#sumDiscountRow"), dEl = $("#sumDiscount");
+    if (dRow && dEl) {
+      if (disc > 0) { dRow.hidden = false; dEl.textContent = "−" + fmt(disc); }
+      else { dRow.hidden = true; }
+    }
+
     shipEl.classList.remove("ship-free");
     if (ship === 0) {
       shipEl.textContent = L(STR.free);
       shipEl.classList.add("ship-free");
       $("#sumWilaya").textContent = "";
-      $("#sumTotal").textContent = fmt(sub);
+      $("#sumTotal").textContent = fmt(base);
     } else if (ship === null) {
       shipEl.textContent = L(STR.calc);
       $("#sumWilaya").textContent = "";
-      $("#sumTotal").textContent = fmt(sub) + " +";
+      $("#sumTotal").textContent = fmt(base) + " +";
     } else {
       shipEl.textContent = fmt(ship);
       $("#sumWilaya").textContent = "(" + (state.delivery === "domicile" ? L(STR.home) : L(STR.desk)) + ")";
-      $("#sumTotal").textContent = fmt(sub + ship);
+      $("#sumTotal").textContent = fmt(base + ship);
     }
 
-    // Nudge offre groupée
-    const nudge = $("#bundleNudge");
-    const nText = $("#bundleText");
+    // Nudge offre groupée (dynamique selon le palier)
+    const nudge = $("#bundleNudge"), nText = $("#bundleText");
     if (nudge && nText) {
-      if (state.qty >= FREE_SHIP_QTY) {
-        nudge.classList.add("is-hit");
-        nText.innerHTML = L(STR.bundleHit);
-      } else {
-        nudge.classList.remove("is-hit");
-        nText.innerHTML = L(STR.bundleDef);
-      }
+      if (state.qty >= 3) { nudge.classList.add("is-hit"); nText.innerHTML = L(STR.bundleHit3); }
+      else if (state.qty >= 2) { nudge.classList.add("is-hit"); nText.innerHTML = L(STR.bundleHit2); }
+      else { nudge.classList.remove("is-hit"); nText.innerHTML = L(STR.bundleDef); }
     }
   }
 
@@ -557,6 +584,7 @@
       "Taille": order.size,
       "Quantité": order.qty,
       "Sous-total": fmt(order.sub),
+      "Réduction pack": order.discount ? "−" + fmt(order.discount) : "—",
       "Frais livraison": order.ship === 0 ? "OFFERTE" : fmt(order.ship),
       "TOTAL": fmt(order.total),
       "Note": order.note || "—"
@@ -607,14 +635,15 @@
 
     const ship = shippingFee() || 0;
     const sub = PRICE * state.qty;
-    const total = sub + ship;
+    const discount = Math.round(sub * discountRate(state.qty));
+    const total = sub - discount + ship;
 
     const order = {
       name, phone, wilaya, commune,
       color: state.color, size: state.size, qty: state.qty,
       delivery: state.delivery === "domicile" ? "À domicile" : "Au bureau (Stop Desk)",
       note: form.note.value.trim(),
-      sub, ship, total
+      sub, discount, ship, total
     };
 
     // Sauvegarde locale (toujours)
@@ -659,6 +688,7 @@
       o.note ? `📝 Note : ${o.note}` : "",
       "",
       `Sous-total : ${fmt(o.sub)}`,
+      o.discount ? `Réduction pack : −${fmt(o.discount)}` : "",
       `Livraison : ${o.ship === 0 ? "OFFERTE ✅" : fmt(o.ship)}`,
       `Total : ${fmt(o.total)}`,
       "💵 Paiement à la livraison"
@@ -875,6 +905,23 @@
   if (langBtn) {
     langBtn.addEventListener("click", () => setLang(lang === "ar" ? "fr" : "ar"));
   }
+
+  // =========================================================
+  // Partage « à une amie »
+  // =========================================================
+  (function shareFeature() {
+    const btn = $("#shareBtn");
+    if (!btn) return;
+    const url = location.origin + location.pathname;
+    btn.addEventListener("click", () => {
+      const text = L(STR.shareText);
+      if (navigator.share) {
+        navigator.share({ title: "Douja", text: text, url: url }).catch(() => {});
+      } else {
+        window.open("https://wa.me/?text=" + encodeURIComponent(text + " " + url), "_blank");
+      }
+    });
+  })();
 
   // Initialisation
   updateStock(state.color);

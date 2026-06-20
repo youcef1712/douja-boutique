@@ -481,6 +481,15 @@ em{font-style:italic;color:var(--wine)}
 .bundle-nudge svg{width:18px;height:18px;flex:none;stroke:#256b46}
 .ship-free{color:#256b46 !important;font-weight:600}
 
+/* Délai de livraison estimé */
+.ship-eta{display:block;color:var(--wine);font-size:.82rem;font-weight:500;margin-top:2px}
+.ship-eta::before{content:"🚚 "}
+
+/* Icônes de réassurance sous le bouton commander */
+.reassure-row{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line)}
+.reassure-row__item{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;flex:1;font-size:.76rem;color:var(--ink-soft);line-height:1.25}
+.reassure-row__item svg{width:24px;height:24px;fill:none;stroke:var(--wine);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
 /* ---- Lookbook : comment la porter ---- */
 .looks{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .look{position:relative;border-radius:var(--r-md);overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
