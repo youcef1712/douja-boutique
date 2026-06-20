@@ -46,8 +46,8 @@
 
   // ---- État de la commande ----
   const state = {
-    color: "Bordeaux",
-    colorHex: "#6e2a40",
+    color: "Champagne",
+    colorHex: "#dcc28e",
     size: "M",
     qty: 1,
     delivery: "domicile",
@@ -108,7 +108,7 @@
     "feat1.t": "ساتان فاخر", "feat1.p": "قماش مختار لِلمعانه الراقي وملمسه الحريري الذي لا يخيّب على أرض الواقع.",
     "feat2.t": "قصّة تُجمّل القوام", "feat2.p": "خصر عالٍ يُنحّف، وطول ميدي يُطيل الساق. إطلالة أنيقة دون أي جهد.",
     "feat3.t": "لا تخرج عن الموضة", "feat3.p": "من العمل إلى السهرة، تتأقلم مع كل المناسبات. قطعة أساسية أنيقة لمواسم عديدة.",
-    "feat4.t": "6 ألوان", "feat4.p": "خمري، أسود، كحلي، زمردي، شامبانيا، وردي فاتح. اختاري لونكِ.",
+    "feat4.t": "5 ألوان", "feat4.p": "شامبانيا، كريمي، أبيض، وردي فاتح، بني. اختاري لونكِ.",
     "looks.eyebrow": "إلهام", "looks.head": "كيف تنسّقينها",
     "look1.tag": "في العمل", "look1.t": "أناقة ومهنية", "look1.p": "مع قميص أبيض وحذاء كعب. إطلالة مرتّبة وأنيقة للعمل.",
     "look2.tag": "في السهرة", "look2.t": "بريق المساء", "look2.p": "توب ساتان، كعب عالٍ ومجوهرات ذهبية. الساتان يعكس الضوء لإطلالة ساحرة.",
@@ -120,7 +120,7 @@
     "rev.eyebrow": "اعتمدنها", "rev.head": "آراء زبوناتنا",
     "rev1.p": "«القماش رائع، أجمل من الصورة. الانسدال مثالي، أشعر بالأناقة.»", "rev1.who": "أميرة · الجزائر",
     "rev2.p": "«وصلت في 3 أيام إلى وهران، دفعت عند الاستلام. مقاس M مناسب تماماً لجسمي. أنصح بها 100٪.»", "rev2.who": "لينا · وهران",
-    "rev3.p": "«أخذت الخمري والأسود. جودة ممتازة مقابل السعر، تبدو فاخرة. شكراً دوجة!»", "rev3.who": "نسرين · قسنطينة",
+    "rev3.p": "«أخذت الشامبانيا والوردي الفاتح. جودة ممتازة مقابل السعر، تبدو فاخرة. شكراً دوجة!»", "rev3.who": "نسرين · قسنطينة",
     "order.eyebrow": "اطلبي في دقيقة", "order.head": "أكملي طلبكِ",
     "order.sub": "املئي الاستمارة وسنتصل بكِ للتأكيد. <strong>الدفع عند الاستلام.</strong>",
     "f.name": "الاسم واللقب", "f.phone": "رقم الهاتف", "f.wilaya": "الولاية", "f.commune": "البلدية / المدينة",
@@ -131,7 +131,7 @@
     "del.desk.t": "إلى المكتب (Stop Desk)", "del.desk.d": "الاستلام من نقطة التوصيل",
     "ph.name": "مثال: أميرة بن علي", "ph.phone": "0X XX XX XX XX", "ph.commune": "مثال: باب الزوار",
     "ph.note": "نقطة دلالة، تفضيل…", "ph.wilaya": "اختاري ولايتكِ",
-    "col.bordeaux": "خمري", "col.noir": "أسود", "col.bleu": "كحلي", "col.emeraude": "زمردي", "col.champagne": "شامبانيا", "col.rose": "وردي فاتح",
+    "col.champagne": "شامبانيا", "col.creme": "كريمي", "col.blanc": "أبيض", "col.rose": "وردي فاتح", "col.marron": "بني",
     "sum.title": "ملخّص الطلب", "sum.prodName": "تنورة ساتان فاخرة",
     "sum.unit": "سعر الوحدة", "sum.qty": "الكمية", "sum.sub": "المجموع الفرعي",
     "sum.ship": "التوصيل", "sum.total": "المبلغ الإجمالي", "sum.cod": "💵 الدفع عند الاستلام",
@@ -189,7 +189,7 @@
   };
   const L = (o) => (o[lang] != null ? o[lang] : o.fr);
 
-  const COLOR_AR = { "Bordeaux": "خمري", "Noir": "أسود", "Bleu nuit": "كحلي", "Émeraude": "زمردي", "Champagne": "شامبانيا", "Rose poudré": "وردي فاتح" };
+  const COLOR_AR = { "Champagne": "شامبانيا", "Crème": "كريمي", "Blanc": "أبيض", "Rose poudré": "وردي فاتح", "Marron": "بني" };
   const colorLabel = (name) => (lang === "ar" ? (COLOR_AR[name] || name) : name);
 
   // Capture du texte français d'origine
@@ -341,7 +341,7 @@
   const orderColor = $("#orderColor");
 
   // Stock limité par couleur (pour l'effet de rareté)
-  const STOCK = { "Bordeaux": 7, "Noir": 5, "Bleu nuit": 9, "Émeraude": 4, "Champagne": 6, "Rose poudré": 8 };
+  const STOCK = { "Champagne": 6, "Crème": 8, "Blanc": 9, "Rose poudré": 5, "Marron": 4 };
   function updateStock(name) {
     const left = STOCK[name] != null ? STOCK[name] : 6;
     const cEl = $("#stockColor"), lEl = $("#stockLeft"), fEl = $("#stockFill"), nEl = $("#colorName");

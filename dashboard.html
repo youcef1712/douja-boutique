@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Douja · Tableau de bord</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231c6b52'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23e7d6b6' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%235c6646'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23e7d6b6' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --cream:#fbf7f2;--cream2:#f4ece3;--ink:#2a2024;--soft:#6b5d63;--wine:#1c6b52;
-    --wine2:#124a39;--gold:#c8a86b;--line:#e9ded3;--ok:#2f7d5b;--white:#fff;
+    --cream:#fbf7f2;--cream2:#f4ece3;--ink:#2a2024;--soft:#6b5d63;--wine:#5c6646;
+    --wine2:#3f472f;--gold:#c8a86b;--line:#e9ded3;--ok:#2f7d5b;--white:#fff;
     --sans:"Jost",system-ui,sans-serif;--serif:"Playfair Display",Georgia,serif;
     --sh:0 8px 26px rgba(86,31,49,.10);
   }
@@ -263,7 +263,7 @@ function countBy(data, key){
   var m={}; data.forEach(function(o){ var k=o[key]||"—"; m[k]=(m[k]||0)+1; }); return m;
 }
 
-var PALETTE = ["#1c6b52","#c8a86b","#2f4858","#1f5c4a","#d9a7b0","#8a3854","#a98b53","#3d5d70"];
+var PALETTE = ["#5c6646","#c8a86b","#2f4858","#1f5c4a","#d9a7b0","#8a3854","#a98b53","#3d5d70"];
 
 function buildCharts(data, now){
   if(typeof Chart==="undefined") return;
@@ -275,7 +275,7 @@ function buildCharts(data, now){
   for(var i=13;i>=0;i--){ var d=new Date(now); d.setDate(now.getDate()-i); days.push(d);
     labels.push(d.getDate()+"/"+(d.getMonth()+1));
     counts.push(data.filter(function(o){ return sameDay(o.date,d); }).length); }
-  charts.push(new Chart($("#chDays"),{type:"bar",data:{labels:labels,datasets:[{data:counts,backgroundColor:"#1c6b52",borderRadius:6}]},
+  charts.push(new Chart($("#chDays"),{type:"bar",data:{labels:labels,datasets:[{data:counts,backgroundColor:"#5c6646",borderRadius:6}]},
     options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}));
 
   // Couleur (doughnut)
