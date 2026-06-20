@@ -4,17 +4,17 @@
    ========================================================= */
 
 :root{
-  /* Couleurs */
-  --cream:#fbf7f2;
-  --cream-2:#f4ece3;
-  --ink:#2a2024;
-  --ink-soft:#6b5d63;
-  --wine:#6e2a40;
-  --wine-deep:#561f31;
+  /* Couleurs — Émeraude · Or · Crème */
+  --cream:#f8f8f1;
+  --cream-2:#eef2ea;
+  --ink:#1d2a23;
+  --ink-soft:#5b6b61;
+  --wine:#1c6b52;        /* vert émeraude (couleur de marque) */
+  --wine-deep:#124a39;   /* vert forêt foncé */
   --gold:#c8a86b;
   --gold-soft:#e7d6b6;
-  --rose:#e8d5d0;
-  --line:#e9ded3;
+  --rose:#cfe6d7;        /* vert sauge doux */
+  --line:#dde7df;
   --white:#ffffff;
   --ok:#2f7d5b;
   --err:#c0392b;
@@ -25,9 +25,9 @@
 
   /* Rayons & ombres */
   --r-sm:10px; --r-md:16px; --r-lg:24px; --r-pill:999px;
-  --sh-sm:0 2px 10px rgba(86,31,49,.06);
-  --sh-md:0 10px 30px rgba(86,31,49,.10);
-  --sh-lg:0 24px 60px rgba(86,31,49,.16);
+  --sh-sm:0 2px 10px rgba(18,60,45,.07);
+  --sh-md:0 10px 30px rgba(18,60,45,.11);
+  --sh-lg:0 24px 60px rgba(18,60,45,.17);
 
   --maxw:1180px;
   --ease:cubic-bezier(.22,.61,.36,1);
@@ -369,13 +369,13 @@ em{font-style:italic;color:var(--wine)}
 .cta-final p{color:var(--gold-soft);margin-bottom:28px;font-size:1.05rem}
 
 /* ---------- Footer ---------- */
-.footer{background:#241419;color:#cbb9bf;padding:54px 0 24px}
+.footer{background:#14241c;color:#c2d0c7;padding:54px 0 24px}
 .footer__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:34px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.1)}
-.footer__brand p{margin-top:14px;font-size:.92rem;max-width:38ch;color:#a8939a}
+.footer__brand p{margin-top:14px;font-size:.92rem;max-width:38ch;color:#9fb0a5}
 .footer__col h4{color:#fff;font-family:var(--sans);font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
-.footer__col a{display:block;font-size:.93rem;margin-bottom:11px;color:#cbb9bf;transition:.15s}
+.footer__col a{display:block;font-size:.93rem;margin-bottom:11px;color:#c2d0c7;transition:.15s}
 .footer__col a:hover{color:var(--gold)}
-.footer__bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:22px;font-size:.82rem;color:#8d7a80}
+.footer__bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:22px;font-size:.82rem;color:#869a8d}
 
 /* ---------- Barre mobile ---------- */
 .mobile-bar{
@@ -383,7 +383,7 @@ em{font-style:italic;color:var(--wine)}
   align-items:center;justify-content:space-between;gap:14px;
   background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
   border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-  box-shadow:0 -6px 24px rgba(86,31,49,.1)
+  box-shadow:0 -6px 24px rgba(18,60,45,.12)
 }
 .mobile-bar__price{display:flex;flex-direction:column;line-height:1.15}
 .mobile-bar__price small{font-size:.74rem;color:var(--ink-soft)}
@@ -523,13 +523,15 @@ em{font-style:italic;color:var(--wine)}
 .to-top.show{opacity:1;visibility:visible;transform:none}
 .to-top svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 @media (min-width:621px){.to-top{bottom:84px;right:84px}}
+/* Sur mobile : empilé au-dessus du bouton WhatsApp (évite le chevauchement) */
+@media (max-width:620px){.to-top{bottom:152px}}
 .nav a.active{color:var(--wine)}
 .nav a.active::after{width:100%}
 
 /* ---- Bandeau Instagram ---- */
-.insta{background:linear-gradient(135deg,#2a1419,#3a1d26);color:#f3e7ea;text-align:center;padding:56px 0}
+.insta{background:linear-gradient(135deg,#13241c,#1d3528);color:#e7f0ea;text-align:center;padding:56px 0}
 .insta h2{color:#fff;font-size:clamp(1.7rem,3.4vw,2.4rem);margin-bottom:10px}
-.insta p{color:#cbb1b9;margin-bottom:24px}
+.insta p{color:#b6c8bd;margin-bottom:24px}
 .insta .btn{--btn-bg:linear-gradient(135deg,#d4b878,#c8a86b);--btn-fg:#3a2a16}
 .insta__handle{display:inline-flex;align-items:center;gap:8px;font-size:1.05rem;color:var(--gold-soft);margin-bottom:22px;font-weight:500}
 .insta__handle svg{width:22px;height:22px}

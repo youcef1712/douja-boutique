@@ -62,6 +62,13 @@
   // ---- Année footer ----
   $("#year").textContent = new Date().getFullYear();
 
+  // ---- Conversion : remonter le formulaire de commande juste après le produit ----
+  (function moveOrderUp() {
+    const cmd = document.getElementById("commander");
+    const prod = document.getElementById("produit");
+    if (cmd && prod) prod.insertAdjacentElement("afterend", cmd);
+  })();
+
   // =========================================================
   // i18n — Français / العربية (RTL)
   // =========================================================
