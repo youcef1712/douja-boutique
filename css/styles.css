@@ -35,6 +35,7 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+section[id], #order-form{scroll-margin-top:84px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 body{
