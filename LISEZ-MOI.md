@@ -1,7 +1,7 @@
 # Douja — Boutique Jupe Satin 🛍️
 
 Site de vente professionnel pour votre jupe en satin (3 500 DA), prêt à l'emploi.
-**Paiement à la livraison · 58 wilayas · 100 % responsive (mobile + PC).**
+**Paiement à la livraison · 69 wilayas · 100 % responsive (mobile + PC).**
 
 ---
 
@@ -43,7 +43,7 @@ automatiquement (selon la couleur choisie).
 ## ✅ Ce qui est déjà inclus
 - Page de vente complète (hero, produit, atouts, avis, FAQ, CTA).
 - Choix **couleur** (6 teintes) et **taille** (S–XL), synchronisés avec la commande.
-- **Formulaire de commande** : nom, téléphone, wilaya (58), commune, livraison
+- **Formulaire de commande** : nom, téléphone, wilaya (69), commune, livraison
   (domicile / bureau), couleur, taille, quantité.
 - **Total calculé en direct** (produit + livraison selon la wilaya).
 - **Validation** des champs (téléphone algérien, champs requis).

@@ -19,7 +19,8 @@
   // Colle ici l'URL de ton script Google Apps (voir LISEZ-MOI). Vide = désactivé.
   const GSHEET_URL = "https://script.google.com/macros/s/AKfycbyR8x8QAvX688LHqCj5le3AOW4fItWdXGT0R8b0zUopOnnuCxa29YXysxrUp7nOyFyH/exec";
 
-  // ---- 58 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
+  // ---- 69 wilayas avec frais de livraison (DA) [domicile, bureau/stopdesk] ----
+  // (mise à jour : 11 nouvelles wilayas créées par la loi n°26-06 du 4 avril 2026)
   // Ajustez librement ces tarifs selon votre transporteur.
   const WILAYAS = [
     ["01 - Adrar", 800, 400], ["02 - Chlef", 600, 300], ["03 - Laghouat", 700, 400],
@@ -41,7 +42,11 @@
     ["49 - El M'Ghair", 800, 450], ["50 - El Meniaa", 900, 500], ["51 - Ouled Djellal", 750, 400],
     ["52 - Bordj Badji Mokhtar", 1100, 650], ["53 - Béni Abbès", 900, 500], ["54 - Timimoun", 950, 550],
     ["55 - Touggourt", 800, 450], ["56 - Djanet", 1100, 650], ["57 - In Salah", 1000, 600],
-    ["58 - In Guezzam", 1100, 650]
+    ["58 - In Guezzam", 1100, 650],
+    ["59 - Aflou", 700, 400], ["60 - Barika", 650, 350], ["61 - El Kantara", 700, 400],
+    ["62 - Bir El Ater", 700, 400], ["63 - El Aricha", 700, 400], ["64 - Ksar Chellala", 650, 400],
+    ["65 - Aïn Ouessara", 700, 400], ["66 - Messaad", 750, 400], ["67 - Ksar El Boukhari", 600, 350],
+    ["68 - Bou Saâda", 700, 400], ["69 - El Abiodh Sidi Cheikh", 850, 450]
   ];
 
   // ---- État de la commande ----
@@ -77,7 +82,7 @@
 
   // Dictionnaire arabe (le français est le texte d'origine du HTML)
   const AR = {
-    "ann.cod": "✦ الدفع عند الاستلام", "ann.deliver": "✦ التوصيل إلى 58 ولاية",
+    "ann.cod": "✦ الدفع عند الاستلام", "ann.deliver": "✦ التوصيل إلى 69 ولاية",
     "ann.satin": "✦ ساتان فاخر · انسدال ناعم", "ann.exchange": "✦ تبديل سهل",
     "nav.product": "المنتج", "nav.reviews": "الآراء", "nav.sizes": "دليل المقاسات", "nav.faq": "الأسئلة",
     "cta.order": "اطلبي الآن",
@@ -88,7 +93,7 @@
     "hero.lede": "ساتان ناعم بانسدال حريري، بخصر عالٍ يُنحّف القوام ويناسب كل إطلالاتك — من اليومي إلى أرقى المناسبات.",
     "price.note": "الدفع عند الاستلام",
     "hero.cta1": "اطلبي الآن", "hero.cta2": "اكتشفي المنتج",
-    "hero.trust1": "توصيل 58 ولاية", "hero.trust2": "الدفع عند الاستلام", "hero.trust3": "تبديل سهل",
+    "hero.trust1": "توصيل 69 ولاية", "hero.trust2": "الدفع عند الاستلام", "hero.trust3": "تبديل سهل",
     "hero.badge": "★ 4,9 / 5 · +240 زبونة", "hero.chip": "ساتان فاخر",
     "trust.fast.t": "توصيل سريع", "trust.fast.s": "في كل الجزائر · 2 إلى 4 أيام",
     "trust.cod.t": "الدفع عند الاستلام", "trust.cod.s": "تدفعين عند الاستلام",
@@ -144,13 +149,13 @@
     "q2": "ما هي مدة التوصيل؟", "a2": "من 2 إلى 4 أيام عمل حسب ولايتكِ. نتصل بكِ للتأكيد قبل الإرسال.",
     "q3": "وإذا لم يناسب المقاس؟", "a3": "لا تقلقي: ننظّم تبديل المقاس أو اللون. تواصلي معنا عبر واتساب أو إنستغرام.",
     "q4": "هل القماش شفّاف؟", "a4": "لا. التنورة مبطّنة من الداخل لمظهر معتم ومريح.",
-    "q5": "هل توصّلون لكل الجزائر؟", "a5": "نعم، نوصّل إلى 58 ولاية، إلى المنزل أو المكتب (stop desk).",
-    "cta.head": "امنحي نفسكِ أناقة الساتان", "cta.p": "3500 دج · الدفع عند الاستلام · 58 ولاية", "cta.btn": "أطلب تنورتي",
+    "q5": "هل توصّلون لكل الجزائر؟", "a5": "نعم، نوصّل إلى 69 ولاية، إلى المنزل أو المكتب (stop desk).",
+    "cta.head": "امنحي نفسكِ أناقة الساتان", "cta.p": "3500 دج · الدفع عند الاستلام · 69 ولاية", "cta.btn": "أطلب تنورتي",
     "insta.head": "تابعينا على إنستغرام", "insta.p": "جديدنا، إطلالات وكواليس — انضمّي إلى مجتمع دوجة.", "insta.btn": "زيارة حساب إنستغرام",
     "foot.brandP": "موضة نسائية · قطع ساتان مختارة بعناية. توصيل لكل الجزائر.",
     "foot.shop": "المتجر", "foot.contact": "اتصال",
     "foot.l1": "تنورة ساتان فاخرة", "foot.l2": "دليل المقاسات", "foot.l3": "آراء الزبونات", "foot.l4": "الأسئلة",
-    "foot.rights": "كل الحقوق محفوظة.", "foot.cod": "الدفع عند الاستلام · 58 ولاية",
+    "foot.rights": "كل الحقوق محفوظة.", "foot.cod": "الدفع عند الاستلام · 69 ولاية",
     "mb.name": "تنورة ساتان", "mb.order": "اطلبي",
     "modal.title": "تم استلام الطلب! 🎉",
     "modal.hint": "أرسلي طلبكِ للتأكيد — اختاري واتساب أو إنستغرام:",
@@ -480,7 +485,7 @@
 
   // Délai de livraison estimé par zone
   const ZONE_CENTRE = [16, 9, 35, 42, 10, 26, 15, 44, 6, 5, 25];
-  const ZONE_SUD = [8, 11, 30, 32, 33, 37, 39, 45, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58];
+  const ZONE_SUD = [8, 11, 30, 32, 33, 37, 39, 45, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 69];
   function deliveryEta(wilayaValue) {
     const n = parseInt(wilayaValue, 10);
     if (ZONE_CENTRE.indexOf(n) >= 0) return L(STR.eta48);
