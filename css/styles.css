@@ -328,6 +328,10 @@ em{font-style:italic;color:var(--wine)}
 .stepper input{width:60px;text-align:center;border:none;border-left:1.5px solid var(--line);border-right:1.5px solid var(--line);border-radius:0;min-height:46px}
 .stepper input:focus{box-shadow:none}
 
+.form-total{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--cream-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:13px 16px;margin-top:4px}
+.form-total span{font-size:.95rem;color:var(--ink)}
+.form-total strong{font-family:var(--serif);font-size:1.45rem;color:var(--wine);font-variant-numeric:tabular-nums}
 .form__reassure{grid-column:1/-1;display:flex;align-items:center;gap:8px;font-size:.86rem;color:var(--ink-soft);margin-top:2px}
 .form__reassure .ic{color:var(--gold);stroke-width:2.2}
 
@@ -433,7 +437,7 @@ em{font-style:italic;color:var(--wine)}
   .reviews{grid-template-columns:1fr}
   .guide{grid-template-columns:1fr;gap:26px}
   .order__grid{grid-template-columns:1fr}
-  .order__summary{position:static;order:-1}
+  .order__summary{position:static}
   .trust-bar__grid{grid-template-columns:repeat(2,1fr);gap:18px}
   .nav{display:none}
 }

@@ -533,6 +533,10 @@
       $("#sumTotal").textContent = fmt(base + ship);
     }
 
+    // Total affiché aussi juste au-dessus du bouton de validation
+    const tf = $("#sumTotalForm");
+    if (tf) tf.textContent = $("#sumTotal").textContent;
+
     // Nudge offre groupée (dynamique selon le palier)
     const nudge = $("#bundleNudge"), nText = $("#bundleText");
     if (nudge && nText) {
