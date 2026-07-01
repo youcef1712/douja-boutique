@@ -185,6 +185,9 @@ em{font-style:italic;color:var(--wine)}
 .thumb .skirt{filter:none}
 .summary__photo::before,.summary__photo::after{display:none}
 .summary__photo .skirt{filter:drop-shadow(0 6px 10px rgba(40,20,28,.18))}
+/* Vraie photo présente : on masque l'illustration et le cadre */
+.product-photo.has-photo .skirt{display:none}
+.product-photo.has-photo::before{display:none}
 /* Caché : remplacé par l'illustration */
 .product-photo__hint{display:none}
 /* Si une image réelle est définie via --img, elle s'affiche par-dessus */

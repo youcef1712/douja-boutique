@@ -113,7 +113,7 @@
     "feat1.t": "ساتان فاخر", "feat1.p": "قماش مختار لِلمعانه الراقي وملمسه الحريري الذي لا يخيّب على أرض الواقع.",
     "feat2.t": "قصّة تُجمّل القوام", "feat2.p": "خصر عالٍ يُنحّف، وطول ميدي يُطيل الساق. إطلالة أنيقة دون أي جهد.",
     "feat3.t": "لا تخرج عن الموضة", "feat3.p": "من العمل إلى السهرة، تتأقلم مع كل المناسبات. قطعة أساسية أنيقة لمواسم عديدة.",
-    "feat4.t": "5 ألوان", "feat4.p": "شامبانيا، كريمي، أبيض، وردي فاتح، بني. اختاري لونكِ.",
+    "feat4.t": "5 ألوان", "feat4.p": "شامبانيا، وردي فاتح، أسود، أخضر فاتح، بني. اختاري لونكِ.",
     "looks.eyebrow": "إلهام", "looks.head": "كيف تنسّقينها",
     "look1.tag": "في العمل", "look1.t": "أناقة ومهنية", "look1.p": "مع قميص أبيض وحذاء كعب. إطلالة مرتّبة وأنيقة للعمل.",
     "look2.tag": "في السهرة", "look2.t": "بريق المساء", "look2.p": "توب ساتان، كعب عالٍ ومجوهرات ذهبية. الساتان يعكس الضوء لإطلالة ساحرة.",
@@ -136,7 +136,7 @@
     "del.desk.t": "إلى المكتب (Stop Desk)", "del.desk.d": "الاستلام من نقطة التوصيل",
     "ph.name": "مثال: أميرة بن علي", "ph.phone": "0X XX XX XX XX", "ph.commune": "مثال: باب الزوار",
     "ph.note": "نقطة دلالة، تفضيل…", "ph.wilaya": "اختاري ولايتكِ",
-    "col.champagne": "شامبانيا", "col.creme": "كريمي", "col.blanc": "أبيض", "col.rose": "وردي فاتح", "col.marron": "بني",
+    "col.champagne": "شامبانيا", "col.rose": "وردي فاتح", "col.noir": "أسود", "col.vert": "أخضر فاتح", "col.marron": "بني",
     "sum.title": "ملخّص الطلب", "sum.prodName": "تنورة ساتان فاخرة",
     "sum.unit": "سعر الوحدة", "sum.qty": "الكمية", "sum.sub": "المجموع الفرعي",
     "sum.ship": "التوصيل", "sum.total": "المبلغ الإجمالي", "sum.cod": "💵 الدفع عند الاستلام",
@@ -202,7 +202,7 @@
   };
   const L = (o) => (o[lang] != null ? o[lang] : o.fr);
 
-  const COLOR_AR = { "Champagne": "شامبانيا", "Crème": "كريمي", "Blanc": "أبيض", "Rose poudré": "وردي فاتح", "Marron": "بني" };
+  const COLOR_AR = { "Champagne": "شامبانيا", "Rose poudré": "وردي فاتح", "Noir": "أسود", "Vert sauge": "أخضر فاتح", "Marron": "بني" };
   const colorLabel = (name) => (lang === "ar" ? (COLOR_AR[name] || name) : name);
 
   // Capture du texte français d'origine
@@ -354,7 +354,16 @@
   const orderColor = $("#orderColor");
 
   // Stock limité par couleur (pour l'effet de rareté)
-  const STOCK = { "Champagne": 6, "Crème": 8, "Blanc": 9, "Rose poudré": 5, "Marron": 4 };
+  const STOCK = { "Champagne": 6, "Rose poudré": 5, "Noir": 8, "Vert sauge": 7, "Marron": 4 };
+
+  // Vraies photos par couleur (déposez les fichiers dans images/ ; sinon l'illustration reste)
+  const COLOR_IMG = {
+    "Champagne": "images/champagne.jpg",
+    "Rose poudré": "images/rose.jpg",
+    "Noir": "images/noir.jpg",
+    "Vert sauge": "images/vert.jpg",
+    "Marron": "images/marron.jpg"
+  };
   function updateStock(name) {
     const left = STOCK[name] != null ? STOCK[name] : 6;
     const cEl = $("#stockColor"), lEl = $("#stockLeft"), fEl = $("#stockFill"), nEl = $("#colorName");
@@ -364,11 +373,28 @@
     if (fEl) fEl.style.width = Math.max(12, Math.min(100, Math.round(left / 15 * 100))) + "%";
   }
 
+  // Affiche la vraie photo de la couleur si le fichier existe, sinon garde l'illustration
+  function clearPhoto(el) { if (el) { el.style.backgroundImage = ""; el.classList.remove("has-photo"); } }
+  function applyPhoto(name) {
+    const src = COLOR_IMG[name];
+    const targets = [mainPhoto, heroPhoto, summaryPhoto];
+    if (!src) { targets.forEach(clearPhoto); return; }
+    const probe = new Image();
+    probe.onload = function () {
+      targets.forEach(function (el) {
+        if (el) { el.style.backgroundImage = "url('" + src + "')"; el.classList.add("has-photo"); }
+      });
+    };
+    probe.onerror = function () { targets.forEach(clearPhoto); };
+    probe.src = src;
+  }
+
   function applyColor(hex, name) {
     state.color = name;
     state.colorHex = hex;
     [mainPhoto, heroPhoto, summaryPhoto].forEach((el) => el && el.style.setProperty("--c", hex));
     if (orderColor.value !== name) orderColor.value = name;
+    applyPhoto(name);
     updateStock(name);
     updateSummary();
   }
@@ -933,6 +959,7 @@
   })();
 
   // Initialisation
+  applyPhoto(state.color);
   updateStock(state.color);
   updateSummary();
   setLang(lang); // applique la langue mémorisée (FR par défaut)
