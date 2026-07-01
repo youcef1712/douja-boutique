@@ -188,12 +188,11 @@ em{font-style:italic;color:var(--wine)}
 /* Vraie photo présente : on masque l'illustration et le cadre */
 .product-photo.has-photo .skirt{display:none}
 .product-photo.has-photo::before{display:none}
-/* Photo entière visible (pas de découpe) + fond crème propre sur les côtés */
+/* Photos normalisées au format du cadre : remplissage parfait, jupe entière */
 .product-photo.has-photo{
-  background-size:contain;
+  background-size:cover;
   background-repeat:no-repeat;
   background-position:center;
-  background-color:#f5f2ec;
 }
 /* Les vignettes gardent la photo en remplissage (petit format) */
 .thumb.has-photo{background-size:cover}
