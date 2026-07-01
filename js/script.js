@@ -359,7 +359,7 @@
   // Vraies photos par couleur (déposez les fichiers dans images/ ; sinon l'illustration reste)
   const COLOR_IMG = {
     "Champagne": "images/champagne.jpg",
-    "Rose poudré": "images/rosee.jpg",
+    "Rose poudré": "images/rose.jpg",
     "Noir": "images/noir.jpg",
     "Vert sauge": "images/vert.jpg",
     "Marron": "images/marron.jpg"
