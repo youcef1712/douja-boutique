@@ -364,6 +364,13 @@
     "Vert sauge": "images/vert.jpg",
     "Marron": "images/marron.jpg"
   };
+  const COLOR_HEX = {
+    "Champagne": "#dcc28e",
+    "Rose poudré": "#d3a3ab",
+    "Noir": "#1c1c22",
+    "Vert sauge": "#9caf8f",
+    "Marron": "#4a2c1d"
+  };
   function updateStock(name) {
     const left = STOCK[name] != null ? STOCK[name] : 6;
     const cEl = $("#stockColor"), lEl = $("#stockLeft"), fEl = $("#stockFill"), nEl = $("#colorName");
@@ -395,6 +402,7 @@
     [mainPhoto, heroPhoto, summaryPhoto].forEach((el) => el && el.style.setProperty("--c", hex));
     if (orderColor.value !== name) orderColor.value = name;
     applyPhoto(name);
+    $$("#thumbs .thumb").forEach((t) => t.classList.toggle("is-active", t.dataset.name === name));
     updateStock(name);
     updateSummary();
   }
@@ -420,14 +428,25 @@
   // =========================================================
   // Vignettes (changent la couleur de la photo principale)
   // =========================================================
-  $$("#thumbs .thumb").forEach((th) => {
-    th.addEventListener("click", () => {
-      $$("#thumbs .thumb").forEach((t) => t.classList.remove("is-active"));
-      th.classList.add("is-active");
-      const c = th.dataset.color;
-      if (c) mainPhoto.style.setProperty("--c", c);
+  // Vignettes = galerie des couleurs (vraie photo si dispo, sinon illustration)
+  function setupThumbs() {
+    $$("#thumbs .thumb").forEach((th) => {
+      const name = th.dataset.name;
+      th.style.setProperty("--c", COLOR_HEX[name] || "#dcc28e");
+      const src = COLOR_IMG[name];
+      if (src) {
+        const probe = new Image();
+        probe.onload = function () { th.style.backgroundImage = "url('" + src + "')"; th.classList.add("has-photo"); };
+        probe.onerror = function () { th.classList.remove("has-photo"); th.style.backgroundImage = ""; };
+        probe.src = src;
+      }
+      th.addEventListener("click", () => {
+        const sw = $$("#swatches .swatch").find((s) => s.dataset.name === name);
+        if (sw) sw.click(); // réutilise toute la logique (photo, couleur, stock, résumé)
+      });
     });
-  });
+  }
+  setupThumbs();
 
   // =========================================================
   // Sélecteur de taille + miroir

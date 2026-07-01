@@ -235,7 +235,7 @@ em{font-style:italic;color:var(--wine)}
 /* ---------- Produit ---------- */
 .product{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:start}
 .product__main{margin-bottom:14px}
-.product__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.product__thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .thumb{aspect-ratio:1;border-radius:var(--r-sm);border:2px solid transparent;cursor:pointer;padding:0;box-shadow:var(--sh-sm)}
 .thumb.is-active{border-color:var(--wine)}
 .product__info h2{font-size:clamp(1.9rem,3.4vw,2.6rem);margin-bottom:10px}
